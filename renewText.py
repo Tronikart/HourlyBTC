@@ -2,7 +2,7 @@ import requests
 import json
 
 token = 'TOKEN'
-
+chanID = 'CHANNEL_ID'
 def loadMessages():
 	with open('messagesID.json') as f:
 			post = json.load(f)
@@ -17,4 +17,4 @@ data = request.json()
 USD = data['bpi']['USD']['rate']
 time = data['time']['updated']
 output = "`1 BTC = $" + USD + "\n\n" + time + "`"
-request = requests.get("https://api.telegram.org/bot" + token + "/editMessageText?chat_id=@HourlyBTC&message_id=" + str(messages['stats'])  + "&text=" + output + "&parse_mode=Markdown")
+request = requests.get("https://api.telegram.org/bot" + token + "/editMessageText?chat_id=" + chanID + "&message_id=" + str(messages['stats'])  + "&text=" + output + "&parse_mode=Markdown")
