@@ -2,6 +2,7 @@ import requests
 import json
 
 token = 'TOKEN'
+chanID = 'CHANNEL_ID'
 
 def loadMessages():
 	with open('messagesID.json') as f:
@@ -11,11 +12,11 @@ def loadMessages():
 messages = loadMessages()
 
 # delete minute stats
-requests.get("https://api.telegram.org/bot" + token + "/deleteMessage?chat_id=@HourlyBTC&message_id=" + str(messages['graph']))
+requests.get("https://api.telegram.org/bot" + token + "/deleteMessage?chat_id=" + chanID + "&message_id=" + str(messages['graph']))
 
 # Sending Graph
 url = "https://api.telegram.org/bot" + token + "/sendPhoto"
-data = {'chat_id':'@HourlyBTC'}
+data = {'chat_id': chanID}
 files = {'photo': open('plot.png', 'rb')}
 request = requests.post(url, files=files, data=data)
 messages['graph'] = request.json()['result']['message_id']
@@ -29,8 +30,8 @@ time = data['time']['updated']
 output = "`1 BTC = $" + USD + "\n\n" + time + "`"
 if request.status_code == requests.codes.ok:
 	# delete graph
-	requests.get("https://api.telegram.org/bot" + token + "/deleteMessage?chat_id=@HourlyBTC&message_id=" + str(messages['stats']))
-	request = requests.get("https://api.telegram.org/bot" + token + "/sendMessage?chat_id=@HourlyBTC&text=" + output + "&parse_mode=Markdown")
+	requests.get("https://api.telegram.org/bot" + token + "/deleteMessage?chat_id=" + chanID + "&message_id=" + str(messages['stats']))
+	request = requests.get("https://api.telegram.org/bot" + token + "/sendMessage?chat_id=" + chanID + "&text=" + output + "&parse_mode=Markdown")
 	messages['stats'] = request.json()['result']['message_id']
 else:
 	pass
